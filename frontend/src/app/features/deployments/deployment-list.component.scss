@@ -1,0 +1,39 @@
+@use '../../../styles/shared-page';
+
+.filter-field {
+  width: 160px;
+
+  ::ng-deep .mat-mdc-text-field-wrapper { background: var(--bg-surface); }
+}
+
+.deployments-table__row {
+  grid-template-columns: 0.9fr 0.9fr 1.2fr 1.3fr 1fr;
+}
+
+.deployments-table__tag {
+  margin-left: 6px;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+.deployments-table__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.deployments-table__inflight {
+  color: var(--status-progress);
+  font-size: 0.78rem;
+}
+
+.deployments-table__failure {
+  padding: 8px 16px 12px 16px;
+  margin: -1px 0 0;
+  border-bottom: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--status-danger) 8%, var(--bg-surface));
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+
+  strong { color: var(--status-danger); }
+}

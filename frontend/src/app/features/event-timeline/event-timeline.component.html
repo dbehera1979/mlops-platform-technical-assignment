@@ -1,0 +1,57 @@
+<div class="page">
+  <header class="page__header">
+    <div>
+      <h1>Event timeline</h1>
+      <p class="page__subtitle">Every deployment transition across the platform, newest first. This is the audit trail behind each deployment.</p>
+    </div>
+  </header>
+
+  <mat-form-field appearance="outline" class="filter-field">
+    <mat-label>Environment</mat-label>
+    <mat-select [(ngModel)]="environmentFilter">
+      @for (env of environmentOptions; track env) {
+        <mat-option [value]="env">{{ env || 'All' }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (entriesState$ | async; as state) {
+    <app-state-message
+      [loading]="state.status === 'loading'"
+      [error]="state.status === 'error' ? state.error : null"
+      [empty]="isEmpty(state)"
+      emptyIcon="history"
+      emptyTitle="No events yet"
+      emptyHint="Events appear here as deployments are requested and move through their lifecycle."
+      [onRetry]="refresh.bind(this)"
+    >
+      @if (state.status === 'success') {
+        <ol class="timeline">
+          @for (entry of state.data; track entry.deploymentId + entry.created_at + entry.to_status) {
+            <li class="timeline__item">
+              <div class="timeline__marker">
+                <app-status-chip [status]="entry.to_status"></app-status-chip>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__headline">
+                  <span class="mono">{{ entry.deploymentId.slice(0, 8) }}…</span>
+                  in <strong>{{ entry.environment }}</strong>
+                  @if (entry.from_status) { moved from {{ entry.from_status }} to {{ entry.to_status }} }
+                  @else { was {{ entry.to_status }} }
+                  @if (entry.reconciled) { <span class="timeline__reconciled">reconciled</span> }
+                </p>
+                @if (entry.message) {
+                  <p class="timeline__message">{{ entry.message }}</p>
+                }
+                <p class="timeline__meta mono">
+                  {{ entry.created_at | date: 'MMM d, y HH:mm:ss' }}
+                  @if (entry.correlation_id) { · trace {{ entry.correlation_id.slice(0, 8) }} }
+                </p>
+              </div>
+            </li>
+          }
+        </ol>
+      }
+    </app-state-message>
+  }
+</div>

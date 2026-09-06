@@ -1,0 +1,50 @@
+@use '../../../styles/shared-page';
+
+.filter-field { width: 180px; }
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline__item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child { border-bottom: none; }
+}
+
+.timeline__body { display: flex; flex-direction: column; gap: 2px; }
+
+.timeline__headline {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+}
+
+.timeline__reconciled {
+  margin-left: 6px;
+  font-size: 0.7rem;
+  color: var(--status-warning);
+  border: 1px solid color-mix(in srgb, var(--status-warning) 45%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 0 5px;
+}
+
+.timeline__message {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
+.timeline__meta {
+  margin: 2px 0 0;
+  color: var(--text-tertiary);
+  font-size: 0.72rem;
+}

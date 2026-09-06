@@ -1,0 +1,98 @@
+<div class="page">
+  <header class="page__header">
+    <div>
+      <h1>Deployments</h1>
+      <p class="page__subtitle">Every deployment attempt across models and environments, newest first.</p>
+    </div>
+  </header>
+
+  <div class="page__toolbar">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Environment</mat-label>
+      <mat-select [(ngModel)]="filters.environment" (selectionChange)="refresh()">
+        @for (env of environmentOptions; track env) {
+          <mat-option [value]="env || undefined">{{ env || 'All' }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="filters.status" (selectionChange)="refresh()">
+        @for (status of statusOptions; track status) {
+          <mat-option [value]="status || undefined">{{ status || 'All' }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-icon-button matTooltip="Refresh" (click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  @if (state$ | async; as state) {
+    <app-state-message
+      [loading]="state.status === 'loading'"
+      [error]="state.status === 'error' ? state.error : null"
+      [empty]="isEmpty(state)"
+      emptyIcon="rocket_launch"
+      emptyTitle="No deployments match these filters"
+      emptyHint="Deploy an approved version from a model's page to see it here."
+      [onRetry]="refresh.bind(this)"
+    >
+      @if (state.status === 'success') {
+        <div class="table deployments-table" role="table">
+          <div class="table__row table__row--head" role="row">
+            <span role="columnheader">Environment</span>
+            <span role="columnheader">Version</span>
+            <span role="columnheader">Status</span>
+            <span role="columnheader">Requested</span>
+            <span role="columnheader">Actions</span>
+          </div>
+          @for (deployment of state.data; track deployment.id) {
+            <div class="table__row table__row--body deployments-table__row" role="row">
+              <span role="cell" class="table__primary">{{ deployment.environment }}</span>
+              <span role="cell" class="mono">{{ deployment.model_version_id.slice(0, 8) }}…</span>
+              <span role="cell">
+                <app-status-chip [status]="deployment.status"></app-status-chip>
+                @if (deployment.is_rollback) {
+                  <span class="deployments-table__tag">rollback</span>
+                }
+              </span>
+              <span role="cell" class="table__meta">
+                {{ deployment.created_at | date: 'MMM d, HH:mm' }}
+                @if (deployment.requested_by) { · {{ deployment.requested_by }} }
+              </span>
+              <span role="cell" class="deployments-table__actions">
+                @if (deployment.status === 'FAILED' && auth.hasRole('operator', 'admin')) {
+                  <button
+                    mat-stroked-button
+                    [disabled]="actingOn === deployment.id"
+                    (click)="retry(deployment)"
+                  >
+                    Retry
+                  </button>
+                }
+                @if (deployment.status === 'SUCCEEDED' && !deployment.is_rollback && auth.hasRole('operator', 'admin')) {
+                  <button
+                    mat-stroked-button
+                    [disabled]="actingOn === deployment.id"
+                    (click)="rollback(deployment)"
+                  >
+                    Rollback
+                  </button>
+                }
+                @if (!isTerminal(deployment.status)) {
+                  <span class="deployments-table__inflight mono">in progress…</span>
+                }
+              </span>
+            </div>
+            @if (deployment.failure_reason) {
+              <div class="deployments-table__failure">
+                <strong>{{ deployment.failure_class }}:</strong> {{ deployment.failure_reason }}
+              </div>
+            }
+          }
+        </div>
+      }
+    </app-state-message>
+  }
+</div>

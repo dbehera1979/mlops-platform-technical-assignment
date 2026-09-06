@@ -1,0 +1,82 @@
+<mxfile host="Electron" agent="claude">
+  <diagram id="mlops-architecture" name="Architecture Overview">
+    <mxGraphModel dx="1471" dy="894" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1050" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#10151A;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="1050" width="1500" as="geometry" />
+        </mxCell>
+        <mxCell id="title" parent="1" style="text;html=1;align=center;valign=middle;fontSize=22;fontStyle=1;fontColor=#E7EDF2;" value="MLOps Platform — Architecture Overview" vertex="1">
+          <mxGeometry height="34" width="1420" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ui" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#212B33;strokeColor=#4A9BE0;strokeWidth=2;fontColor=#E7EDF2;fontSize=14;fontStyle=1;verticalAlign=middle;" value="Angular UI" vertex="1">
+          <mxGeometry height="110" width="1420" x="40" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#D9A234;dashed=1;fontColor=#D9A234;fontSize=12;fontFamily=Courier New;verticalAlign=middle;align=center;" value="Auth boundary — JWT bearer + RBAC (admin / approver / operator / viewer)" vertex="1">
+          <mxGeometry height="50" width="1420" x="40" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#212B33;strokeColor=#3A4650;strokeWidth=1.5;fontColor=#E7EDF2;fontSize=13;fontStyle=1;verticalAlign=middle;" value="FastAPI API Layer" vertex="1">
+          <mxGeometry height="85" width="1420" x="40" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-registry" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#1A2128;strokeColor=#3A4650;fontColor=#E7EDF2;fontSize=12;fontStyle=1;verticalAlign=middle;" value="Model Registry Service" vertex="1">
+          <mxGeometry height="100" width="330" x="40" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-deploy" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#1A2128;strokeColor=#3A4650;fontColor=#E7EDF2;fontSize=12;fontStyle=1;verticalAlign=middle;" value="Deployment Service" vertex="1">
+          <mxGeometry height="100" width="330" x="400" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-monitor" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#1A2128;strokeColor=#3A4650;fontColor=#E7EDF2;fontSize=12;fontStyle=1;verticalAlign=middle;" value="Monitoring Service" vertex="1">
+          <mxGeometry height="100" width="330" x="760" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="svc-shared" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#1A2128;strokeColor=#3A4650;fontColor=#E7EDF2;fontSize=12;fontStyle=1;verticalAlign=middle;" value="Shared: audit, idempotency, correlation-id&#xa;&#xa;cross-cutting" vertex="1">
+          <mxGeometry height="100" width="340" x="1120" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="persistence" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#1A2128;strokeColor=#35A97E;strokeWidth=1.5;fontColor=#E7EDF2;fontSize=13;fontStyle=1;verticalAlign=middle;" value="Repository / ORM (SQLAlchemy)&#xa;&#xa;SQLite (dev, default) · PostgreSQL (prod, ADR-002)" vertex="1">
+          <mxGeometry height="120" width="680" x="40" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="worker" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#1A2128;strokeColor=#35A97E;strokeWidth=1.5;fontColor=#E7EDF2;fontSize=13;fontStyle=1;verticalAlign=middle;" value="Async Worker (asyncio) — ADR-001" vertex="1">
+          <mxGeometry height="120" width="680" x="780" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="runtime" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#1E1A14;strokeColor=#D9645A;strokeWidth=1.5;dashed=1;fontColor=#E7EDF2;fontSize=13;fontStyle=1;verticalAlign=middle;" value="External Model Runtime&#xa;&#xa;pluggable ModelRuntime interface — SimulatedModelRuntime (take-home) → real serving stack (prod)" vertex="1">
+          <mxGeometry height="120" width="680" x="780" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ui-auth" edge="1" parent="1" source="ui" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#4A9BE0;strokeWidth=2;endArrow=block;" target="auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-auth-api" edge="1" parent="1" source="auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#D9A234;strokeWidth=2;endArrow=block;" target="api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-api-registry" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;endArrow=block;" target="svc-registry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-api-deploy" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;endArrow=block;" target="svc-deploy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-api-monitor" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;endArrow=block;" target="svc-monitor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-api-shared" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;endArrow=block;" target="svc-shared">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-registry-persist" edge="1" parent="1" source="svc-registry" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;endArrow=block;" target="persistence">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-monitor-persist" edge="1" parent="1" source="svc-monitor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;endArrow=block;" target="persistence">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-deploy-worker" edge="1" parent="1" source="svc-deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;endArrow=block;" target="worker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-deploy-persist" edge="1" parent="1" source="svc-deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;endArrow=block;" target="persistence">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-persist-worker" edge="1" parent="1" source="persistence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#93A3B0;startArrow=block;endArrow=block;fontColor=#93A3B0;fontFamily=Courier New;fontSize=10;" target="worker" value="shared DB = durability">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-worker-runtime" edge="1" parent="1" source="worker" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#D9645A;strokeWidth=2;endArrow=block;fontColor=#D9645A;fontFamily=Courier New;fontSize=10;" target="runtime" value="deploy() / rollback() / get_status()">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

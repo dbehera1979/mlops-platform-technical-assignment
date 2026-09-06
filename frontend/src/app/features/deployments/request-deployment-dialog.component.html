@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Deploy {{ data.versionLabel }}</h2>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content class="dialog-content">
+    <mat-form-field appearance="outline">
+      <mat-label>Environment</mat-label>
+      <mat-select formControlName="environment">
+        @for (env of environments; track env) {
+          <mat-option [value]="env">{{ env }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-slide-toggle formControlName="simulate_failure">
+      Force a simulated failure (for testing retry)
+    </mat-slide-toggle>
+    @if (errorMessage) {
+      <p class="dialog-error" role="alert">{{ errorMessage }}</p>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close [disabled]="submitting">Cancel</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || submitting">
+      @if (submitting) { <mat-spinner diameter="18"></mat-spinner> } @else { Deploy }
+    </button>
+  </mat-dialog-actions>
+</form>
