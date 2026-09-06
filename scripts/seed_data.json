@@ -1,0 +1,102 @@
+{
+  "models": [
+    {
+      "name": "fraud-detector",
+      "description": "Real-time transaction fraud scoring for the payments line.",
+      "owner_team": "risk-ml",
+      "versions": [
+        {
+          "version_label": "v1",
+          "framework": "sklearn",
+          "algorithm": "gradient-boosted-trees",
+          "artifact_uri": "s3://mlops-artifacts/fraud-detector/v1/model.pkl",
+          "training_data_ref": "s3://mlops-data/fraud/2025-11-training-set",
+          "tags": {"pii": "none", "region": "us-east"},
+          "created_by": "operator",
+          "promote_to": "PRODUCTION",
+          "deploy": [
+            {"environment": "STAGING", "outcome": "succeed"},
+            {"environment": "PRODUCTION", "outcome": "succeed"}
+          ]
+        },
+        {
+          "version_label": "v2",
+          "framework": "sklearn",
+          "algorithm": "xgboost",
+          "artifact_uri": "s3://mlops-artifacts/fraud-detector/v2/model.pkl",
+          "training_data_ref": "s3://mlops-data/fraud/2026-02-training-set",
+          "tags": {"pii": "none", "region": "us-east"},
+          "created_by": "operator",
+          "promote_to": "APPROVED",
+          "deploy": [
+            {"environment": "STAGING", "outcome": "fail_then_retry_succeed"}
+          ]
+        },
+        {
+          "version_label": "v3-experimental",
+          "framework": "pytorch",
+          "algorithm": "tabnet",
+          "artifact_uri": "s3://mlops-artifacts/fraud-detector/v3/model.pt",
+          "training_data_ref": "s3://mlops-data/fraud/2026-06-training-set",
+          "tags": {"pii": "none", "region": "us-east", "experimental": "true"},
+          "created_by": "operator",
+          "promote_to": "DRAFT",
+          "deploy": []
+        }
+      ]
+    },
+    {
+      "name": "churn-predictor",
+      "description": "Monthly subscriber churn risk scoring.",
+      "owner_team": "growth-ml",
+      "versions": [
+        {
+          "version_label": "v1",
+          "framework": "pytorch",
+          "algorithm": "lstm",
+          "artifact_uri": "s3://mlops-artifacts/churn-predictor/v1/model.pt",
+          "training_data_ref": "s3://mlops-data/churn/2025-12-training-set",
+          "tags": {"pii": "customer_id_hashed"},
+          "created_by": "operator",
+          "promote_to": "PRODUCTION",
+          "deploy": [
+            {"environment": "STAGING", "outcome": "succeed"},
+            {"environment": "PRODUCTION", "outcome": "succeed"},
+            {"environment": "PRODUCTION", "outcome": "succeed_then_rollback"}
+          ]
+        },
+        {
+          "version_label": "v2",
+          "framework": "pytorch",
+          "algorithm": "lstm",
+          "artifact_uri": "s3://mlops-artifacts/churn-predictor/v2/model.pt",
+          "training_data_ref": "s3://mlops-data/churn/2026-05-training-set",
+          "tags": {"pii": "customer_id_hashed"},
+          "created_by": "operator",
+          "promote_to": "VALIDATED",
+          "deploy": []
+        }
+      ]
+    },
+    {
+      "name": "demand-forecaster",
+      "description": "SKU-level demand forecasting for plant inventory planning.",
+      "owner_team": "supply-chain-ml",
+      "versions": [
+        {
+          "version_label": "v1",
+          "framework": "prophet",
+          "algorithm": "additive-time-series",
+          "artifact_uri": "s3://mlops-artifacts/demand-forecaster/v1/model.pkl",
+          "training_data_ref": "s3://mlops-data/demand/2026-01-training-set",
+          "tags": {"plant": "all"},
+          "created_by": "operator",
+          "promote_to": "APPROVED",
+          "deploy": [
+            {"environment": "DEV", "outcome": "succeed"}
+          ]
+        }
+      ]
+    }
+  ]
+}
